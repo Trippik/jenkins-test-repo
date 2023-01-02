@@ -1,11 +1,26 @@
 pipeline {
+    environment {
+        imagename = "trippik/jenkins-test"
+        registryCredential = "dockerhub"
+        dockerImage = ''
+    }
     agent any
-
     stages {
-        stage('Test Stage') {
+        stage('Build Image') {
             steps {
-                echo 'Hello Git World'
+                script {
+                    dockerImage = docker.build imagename
+                }
             }
         }
+        stage('Upload Image') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push("$BUILD_NUMBER")
+                    dockerImage.push('latest')
+                }
+            }
+        } 
     }
 }
