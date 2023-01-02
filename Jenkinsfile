@@ -19,8 +19,9 @@ pipeline {
                     docker.withRegistry( '', registryCredential ) {
                     dockerImage.push("$BUILD_NUMBER")
                     dockerImage.push('latest')
+                    }
                 }
-            }
-        } 
+            } 
+        }
     }
 }
